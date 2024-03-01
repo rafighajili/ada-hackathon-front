@@ -1,11 +1,13 @@
 import { z } from "zod";
+import { ReportSchema } from "#/schemas";
 
 export const UserSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   phoneNumber: z.string(),
+  report: ReportSchema.nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
