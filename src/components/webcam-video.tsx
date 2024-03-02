@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import { Button, Progress } from "@nextui-org/react";
+import { Button, Progress, Skeleton } from "@nextui-org/react";
 import { PlayIcon, StopIcon } from "@heroicons/react/24/solid";
 
 export function WebcamVideo({ setFile }: { setFile: Dispatch<SetStateAction<File | null>> }) {
@@ -9,6 +9,7 @@ export function WebcamVideo({ setFile }: { setFile: Dispatch<SetStateAction<File
   const [capturing, setCapturing] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [recordedChunks, setRecordedChunks] = useState([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (seconds === 10) {
@@ -64,7 +65,11 @@ export function WebcamVideo({ setFile }: { setFile: Dispatch<SetStateAction<File
           mirrored={true}
           ref={webcamRef}
           videoConstraints={videoConstraints}
+          onUserMedia={() => setIsLoaded(true)}
+          className={!isLoaded ? "hidden" : ""}
         />
+
+        {!isLoaded && <Skeleton className="aspect-square" />}
       </div>
 
       <div className="flex items-center gap-x-3">
@@ -73,7 +78,7 @@ export function WebcamVideo({ setFile }: { setFile: Dispatch<SetStateAction<File
           color={capturing ? "danger" : "success"}
           variant="light"
           onPress={handleStartCaptureClick}
-          isDisabled={capturing}
+          isDisabled={!isLoaded || capturing || seconds === 10}
           radius="full"
           size="sm"
         >

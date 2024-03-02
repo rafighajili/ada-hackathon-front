@@ -94,7 +94,14 @@ export default function Page() {
                         >
                           Cancel
                         </Button>
-                        <Button color="primary" onPress={() => setIsSaved(true)} isDisabled={!file}>
+                        <Button
+                          color="primary"
+                          onPress={() => {
+                            setIsSaved(true);
+                            onClose();
+                          }}
+                          isDisabled={!file}
+                        >
                           Save video
                         </Button>
                       </ModalFooter>
@@ -104,7 +111,12 @@ export default function Page() {
               </Modal>
             </div>
 
-            <Button color="primary" isDisabled={!isSaved} onPress={() => file && uploadReportVideo({ file })}>
+            <Button
+              color="primary"
+              isDisabled={!isSaved}
+              isLoading={isLoading}
+              onPress={() => file && uploadReportVideo({ file })}
+            >
               Upload
             </Button>
           </div>

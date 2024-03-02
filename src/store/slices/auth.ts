@@ -40,8 +40,9 @@ const authSlice = createSlice({
     });
 
     builder.addMatcher(reportService.endpoints.uploadReportVideo.matchFulfilled, (state, { payload }) => {
-      // @ts-ignore
-      state.user = { ...state.user, report: payload };
+      if (state.user) {
+        state.user = { ...state.user, report: payload };
+      }
     });
   },
 });
