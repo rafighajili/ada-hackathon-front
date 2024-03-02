@@ -75,7 +75,7 @@ export function WebcamVideo({ setFile }: { setFile: Dispatch<SetStateAction<File
       <div className="flex items-center gap-x-3">
         <Button
           isIconOnly
-          color={capturing ? "danger" : "success"}
+          color={capturing ? "danger" : "primary"}
           variant="light"
           onPress={handleStartCaptureClick}
           isDisabled={!isLoaded || capturing || seconds === 10}
@@ -85,7 +85,13 @@ export function WebcamVideo({ setFile }: { setFile: Dispatch<SetStateAction<File
           {capturing ? <StopIcon className="h-5 w-5" /> : <PlayIcon className="h-5 w-5" />}
         </Button>
 
-        <Progress aria-label="Recorded seconds" value={seconds} maxValue={10} color="secondary" size="sm" />
+        <Progress
+          aria-label="Recorded seconds"
+          value={seconds}
+          maxValue={10}
+          size="sm"
+          classNames={{ indicator: "bg-gradient-to-r from-secondary to-primary" }}
+        />
 
         <span className="text-sm">{`00:${
           seconds.toFixed(0).length === 1 ? "0" + seconds.toFixed(0) : seconds.toFixed(0)

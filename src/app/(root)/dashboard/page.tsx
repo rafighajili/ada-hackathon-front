@@ -63,7 +63,7 @@ export default function Page() {
                     isHovered && "bg-default-200",
                     isPressed && "bg-default-300",
                     isFocusVisible && "outline outline-offset-2 outline-primary",
-                    isSaved && "bg-success-100 text-xl font-bold text-success-500",
+                    isSaved && "bg-gradient-to-br from-primary/20 to-secondary/20 text-xl font-bold",
                   )
                 }
               >
@@ -122,7 +122,7 @@ export default function Page() {
               <Button
                 color="danger"
                 variant="light"
-                isDisabled={!isSaved}
+                isDisabled={!isSaved || isLoading}
                 onPress={() => {
                   setFile(null);
                   setIsSaved(false);
