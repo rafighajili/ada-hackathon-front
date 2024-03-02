@@ -3,11 +3,11 @@ import { z } from "zod";
 export const ReportSchema = z.object({
   id: z.string().uuid(),
   gender: z.string(),
-  ghd_rate: z.string(),
-  depression_level: z.string(),
-  cancer_rate: z.string(),
-  smoke: z.string(),
-  disease_rate: z.string(),
+  ghd_rate: z.number(),
+  depression_level: z.number(),
+  cancer_rate: z.number(),
+  smoke: z.number(),
+  disease_rate: z.number(),
   file_path: z.string(),
 });
 

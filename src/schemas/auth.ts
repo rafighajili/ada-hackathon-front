@@ -8,8 +8,6 @@ export const UserSchema = z.object({
   email: z.string().email(),
   phoneNumber: z.string(),
   report: ReportSchema.nullable(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
 });
 
 export interface UserType extends z.infer<typeof UserSchema> {}
