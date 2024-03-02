@@ -26,10 +26,6 @@ function calculateAverage(numbers: number[]) {
   return sum / numbers.length;
 }
 
-function convertSnakeCaseToTitleCase(str: string) {
-  return str.replace("_", " ").replace(/\b\w/g, (firstLetter) => firstLetter.toUpperCase());
-}
-
 export default function Page() {
   const { user } = useAppSelector(selectAuth);
 
@@ -60,12 +56,14 @@ export default function Page() {
             <div>
               <ButtonAria
                 onPress={onOpen}
+                isDisabled={isSaved}
                 className={({ isHovered, isPressed, isFocusVisible }) =>
                   twMerge(
                     "h-32 w-full rounded-xl border border-dashed border-default-500 bg-default-100 outline-none duration-200",
                     isHovered && "bg-default-200",
                     isPressed && "bg-default-300",
                     isFocusVisible && "outline outline-offset-2 outline-primary",
+                    isSaved && "bg-success-100 text-xl font-bold text-success-500",
                   )
                 }
               >
@@ -111,14 +109,28 @@ export default function Page() {
               </Modal>
             </div>
 
-            <Button
-              color="primary"
-              isDisabled={!isSaved}
-              isLoading={isLoading}
-              onPress={() => file && uploadReportVideo({ file })}
-            >
-              Upload
-            </Button>
+            <div className="flex flex-wrap justify-between gap-6">
+              <Button
+                color="primary"
+                isDisabled={!isSaved}
+                isLoading={isLoading}
+                onPress={() => file && uploadReportVideo({ file })}
+              >
+                Upload video
+              </Button>
+
+              <Button
+                color="danger"
+                variant="light"
+                isDisabled={!isSaved}
+                onPress={() => {
+                  setFile(null);
+                  setIsSaved(false);
+                }}
+              >
+                Remove saved video
+              </Button>
+            </div>
           </div>
         ) : (
           <div>
