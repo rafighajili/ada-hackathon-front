@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserType } from "#/schemas";
 import { RootState } from "#/store";
-import { authService } from "#/services";
+import { authService, reportService } from "#/services";
 
 const initialState: {
   user: UserType | null;
@@ -37,6 +37,11 @@ const authSlice = createSlice({
     });
     builder.addMatcher(authService.endpoints.getUser.matchRejected, (state) => {
       state.isLoading = false;
+    });
+
+    builder.addMatcher(reportService.endpoints.uploadReportVideo.matchFulfilled, (state, { payload }) => {
+      // @ts-ignore
+      state.user = { ...state.user, report: payload };
     });
   },
 });
