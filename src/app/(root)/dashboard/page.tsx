@@ -1,21 +1,22 @@
 "use client";
 
 import { Button as ButtonAria } from "react-aria-components";
-import { Button, Card } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { twMerge } from "tailwind-merge";
 import { useUploadReportVideoMutation } from "#/services";
 import { useAppSelector } from "#/store";
 import { selectAuth } from "#/store/slices";
 import { useState } from "react";
-
-const values = [
-  ["Gender", "Male"],
-  ["GHD rate", 32],
-  ["Depression level", 24],
-  ["Cancer rate", 17],
-  ["Smokes", "Yes"],
-  ["Disease rate", 9],
-];
+import { WebcamVideo } from "#/components";
 
 function calculateAverage(numbers: number[]) {
   let sum = 0;
@@ -33,8 +34,11 @@ export default function Page() {
   const { user } = useAppSelector(selectAuth);
 
   const [file, setFile] = useState<File | null>(null);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
 
   const [uploadReportVideo, { isLoading }] = useUploadReportVideoMutation();
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const totalAvg =
     user &&
@@ -55,6 +59,7 @@ export default function Page() {
 
             <div>
               <ButtonAria
+                onPress={onOpen}
                 className={({ isHovered, isPressed, isFocusVisible }) =>
                   twMerge(
                     "h-32 w-full rounded-xl border border-dashed border-default-500 bg-default-100 outline-none duration-200",
@@ -66,9 +71,40 @@ export default function Page() {
               >
                 {file ? "Your video was saved" : "Upload your video"}
               </ButtonAria>
+
+              <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent>
+                  {(onClose) => (
+                    <>
+                      <ModalHeader className="flex flex-col">
+                        <h2 className="text-xl font-bold">Record your face</h2>
+                        <p className="text-sm font-normal text-default-500">This video will be 10 seconds.</p>
+                      </ModalHeader>
+                      <ModalBody>
+                        <WebcamVideo setFile={setFile} />
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button
+                          color="danger"
+                          variant="light"
+                          onPress={() => {
+                            setIsSaved(false);
+                            onClose();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button color="primary" onPress={() => setIsSaved(true)} isDisabled={!file}>
+                          Save video
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  )}
+                </ModalContent>
+              </Modal>
             </div>
 
-            <Button color="primary" isDisabled={!file} onPress={() => file && uploadReportVideo({ file })}>
+            <Button color="primary" isDisabled={!isSaved} onPress={() => file && uploadReportVideo({ file })}>
               Upload
             </Button>
           </div>
