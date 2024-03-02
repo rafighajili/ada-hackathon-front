@@ -42,7 +42,7 @@ export function WebcamVideo({ setFile }: { setFile: Dispatch<SetStateAction<File
     mediaRecorderRef.current.stop();
     if (recordedChunks.length) {
       const blob = new Blob(recordedChunks, { type: "video/webm" });
-      const file = new File([blob], "name");
+      const file = new File([blob], "video.webm", { type: "video/webm" });
       setFile(file);
       setRecordedChunks([]);
     }
